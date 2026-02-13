@@ -17,7 +17,7 @@ app.use(express.json());
 // 2. ESCUDO ANTI-SPAM (Rate Limit)
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
-    max: 10, 
+    max: 30, 
     message: {
         error: "Has enviado demasiadas propuestas. Por favor, espera 15 minutos antes de registrar más."
     }
