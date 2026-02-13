@@ -15,6 +15,9 @@ function App() {
   const [editError, setEditError] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
 
+ 
+  const [isBanned, setIsBanned] = useState(false);
+
   useEffect(() => {
     obtenerRegistros();
     const t = setTimeout(() => setLoading(false), 500);
@@ -25,9 +28,9 @@ function App() {
     try {
       const res = await axios.get(`${API_URL}/registros`);
       setRegistros(res.data);
-    } catch (err) { 
+    } catch (err) {
       const error = err as AxiosError;
-      console.error("❌ Error al obtener datos:", error.response?.data || error.message); 
+      console.error("❌ Error al obtener datos:", error.response?.data || error.message);
     }
   };
 
@@ -58,7 +61,7 @@ function App() {
       setSuccessMessage('Registro guardado');
       setTimeout(() => setSuccessMessage(''), 3000);
       obtenerRegistros();
-    } catch (err) { 
+    } catch (err) {
       const error = err as AxiosError<any>;
       console.error("❌ Error al agregar:", error.response?.data || error.message);
       alert(`Error: ${error.response?.data?.details || 'No se pudo agregar'}`);
@@ -115,6 +118,48 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+
+  if (isBanned) {
+    return (
+      <div style={{
+        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+        backgroundColor: 'black', color: 'white', display: 'flex',
+        flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
+        zIndex: 9999, fontFamily: 'monospace', textAlign: 'center', padding: '20px',
+        boxSizing: 'border-box'
+      }}>
+        <h1 style={{ fontSize: '5rem', margin: '0' }}>Acceso restringido</h1>
+        <h2 style={{ color: 'white', marginTop: '20px' }}>Se ha detectado un intento de inyección maliciosa.</h2>
+        <p style={{ fontSize: '1.2rem', color: 'gray', maxWidth: '600px' }}>
+          Tus acciones han sido registradas. Tu IP ha sido registrada y notificada al administrador de la página. El acceso ha sido revocado permanentemente para esta sesión.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          style={{
+            marginTop: '40px',
+            padding: '12px 24px',
+            backgroundColor: 'white', 
+            color: 'black', 
+            border: 'none', 
+            borderRadius: '4px',
+            fontSize: '1rem',
+            fontFamily: 'monospace',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            fontWeight: 'bold'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = '#b8b8b8';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = 'white';
+          }}
+        >
+          No volverá a ocurrir
+        </button>
+      </div>
+    );
+  }
   return (
     <div className="app-container">
       <div className="card">
@@ -124,13 +169,22 @@ function App() {
         {deleteMessage && <div className="delete-message">{deleteMessage}</div>}
         {nuevoError && <div className="input-error">{nuevoError}</div>}
         {successMessage && <div className="success-message">{successMessage}</div>}
+
         <div className="input-group">
           <div className="input-column">
             <input
               className="input"
               type="text"
               value={nuevoTexto}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setNuevoTexto(e.target.value); if (nuevoError) setNuevoError(''); }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const texto = e.target.value;
+                if (texto.toLowerCase().includes('<script>')) {
+                  setIsBanned(true); 
+                  return;
+                }
+                setNuevoTexto(texto);
+                if (nuevoError) setNuevoError('');
+              }}
               onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && agregarRegistro()}
               placeholder="Escribe algo"
               maxLength={100}
@@ -155,7 +209,7 @@ function App() {
           <div className="registros-container">
             {registros.length > 0 && (
               <div className="registros-header">
-                  <span className="registros-count">Se contó <span>{registros.length.toLocaleString()}</span> registros.</span>
+                <span className="registros-count">Se contó <span>{registros.length.toLocaleString()}</span> registros.</span>
               </div>
             )}
             <div className="registros-list">
@@ -199,7 +253,15 @@ function App() {
             <textarea
               className="textarea"
               value={editando.contenido}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { setEditando({ ...editando, contenido: e.target.value }); if (editError) setEditError(''); }}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                const texto = e.target.value;
+                if (texto.toLowerCase().includes('<script>')) {
+                  setIsBanned(true); 
+                  return;
+                }
+                setEditando({ ...editando, contenido: texto });
+                if (editError) setEditError('');
+              }}
               maxLength={100}
             />
             {editError && <div className="input-error">{editError}</div>}
