@@ -15,12 +15,12 @@ function App() {
   const [editError, setEditError] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
 
- 
+
   const [isBanned, setIsBanned] = useState(false);
 
   useEffect(() => {
     obtenerRegistros();
-    const t = setTimeout(() => setLoading(false), 500);
+    const t = setTimeout(() => setLoading(false), 2500);
     return () => clearTimeout(t);
   }, []);
 
@@ -118,6 +118,7 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const totalHistorico = registros.length > 0 ? Math.max(...registros.map((reg: any) => reg.id)) : 0;
 
   if (isBanned) {
     return (
@@ -128,19 +129,19 @@ function App() {
         zIndex: 9999, fontFamily: 'monospace', textAlign: 'center', padding: '20px',
         boxSizing: 'border-box'
       }}>
-        <h1 style={{ fontSize: '5rem', margin: '0' }}>Acceso restringido</h1>
+        <h1 style={{ fontSize: '3rem', margin: '0' }}>Acción restringida</h1>
         <h2 style={{ color: 'white', marginTop: '20px' }}>Se ha detectado un intento de inyección maliciosa.</h2>
         <p style={{ fontSize: '1.2rem', color: 'gray', maxWidth: '600px' }}>
-          Tus acciones han sido registradas. Tu IP ha sido registrada y notificada al administrador de la página. El acceso ha sido revocado permanentemente para esta sesión.
+          Tus acciones han sido registradas. Tu IP ha sido registrada y notificada al administrador de la página. El acceso ha sido revocado para esta sesión.
         </p>
         <button
           onClick={() => window.location.reload()}
           style={{
             marginTop: '40px',
             padding: '12px 24px',
-            backgroundColor: 'white', 
-            color: 'black', 
-            border: 'none', 
+            backgroundColor: 'white',
+            color: 'black',
+            border: 'none',
             borderRadius: '4px',
             fontSize: '1rem',
             fontFamily: 'monospace',
@@ -179,7 +180,7 @@ function App() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const texto = e.target.value;
                 if (texto.toLowerCase().includes('<script>')) {
-                  setIsBanned(true); 
+                  setIsBanned(true);
                   return;
                 }
                 setNuevoTexto(texto);
@@ -203,6 +204,8 @@ function App() {
             <div className="loader">
               <div className="spinner" aria-hidden="true"></div>
               <div className="loading-text">Cargando registros...</div>
+              <div className="sabias-que">Sabías que...</div>
+              <span className="hubieron">Hubieron alguna vez {totalHistorico.toLocaleString()} registros.</span>
             </div>
           </div>
         ) : (
@@ -210,6 +213,7 @@ function App() {
             {registros.length > 0 && (
               <div className="registros-header">
                 <span className="registros-count">Se contó <span>{registros.length.toLocaleString()}</span> registros.</span>
+                
               </div>
             )}
             <div className="registros-list">
@@ -256,7 +260,7 @@ function App() {
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 const texto = e.target.value;
                 if (texto.toLowerCase().includes('<script>')) {
-                  setIsBanned(true); 
+                  setIsBanned(true);
                   return;
                 }
                 setEditando({ ...editando, contenido: texto });
