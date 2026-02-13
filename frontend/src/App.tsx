@@ -173,7 +173,7 @@ function App() {
             {editError && <div className="input-error">{editError}</div>}
             <div className="modal-actions">
               <button className="btn btn-primary" onClick={actualizarRegistro}>
-                Guardar cambios
+                Actualizar
               </button>
               <button className="btn btn-secondary" onClick={() => setEditando(null)}>
                 Cancelar
