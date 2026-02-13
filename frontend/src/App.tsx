@@ -14,7 +14,8 @@ function App() {
   const [editando, setEditando] = useState(null);
   const [editError, setEditError] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
 
   const [isBanned, setIsBanned] = useState(false);
 
@@ -28,6 +29,7 @@ function App() {
     try {
       const res = await axios.get(`${API_URL}/registros`);
       setRegistros(res.data);
+      setCurrentPage(1);
     } catch (err) {
       const error = err as AxiosError;
       console.error("❌ Error al obtener datos:", error.response?.data || error.message);
@@ -64,7 +66,7 @@ function App() {
     } catch (err) {
       const error = err as AxiosError<any>;
       console.error("❌ Error al agregar:", error.response?.data || error.message);
-      alert(`Error: ${error.response?.data?.details || 'No se pudo agregar'}`);
+      alert(`Error: ${error.response?.data?.details || 'No se pudo agregar. No intentes agregar muchas peticiones.'}`);
     }
   };
 
@@ -119,6 +121,26 @@ function App() {
   };
 
   const totalHistorico = registros.length > 0 ? Math.max(...registros.map((reg: any) => reg.id)) : 0;
+
+  // Lógica de paginación
+  const totalPages = Math.ceil(registros.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedRegistros = registros.slice(startIndex, endIndex);
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   if (isBanned) {
     return (
@@ -220,7 +242,7 @@ function App() {
               {registros.length === 0 ? (
                 <p className="empty-state">No has escrito nada</p>
               ) : (
-                registros.map((reg: any) => (
+                paginatedRegistros.map((reg: any) => (
                   <div key={reg.id} className="registro-item">
                     <div className="registro-content">
                       <p className="registro-text">{reg.contenido}</p>
@@ -246,6 +268,29 @@ function App() {
                 ))
               )}
             </div>
+            {registros.length > 0 && (
+              <div className="pagination">
+                <button
+                  className="btn btn-pagination"
+                  onClick={goToPreviousPage}
+                  disabled={currentPage === 1}
+                  title="Página anterior"
+                >
+                  ← Anterior
+                </button>
+                <span className="pagination-info">
+                  Página {currentPage} de {totalPages}
+                </span>
+                <button
+                  className="btn btn-pagination"
+                  onClick={goToNextPage}
+                  disabled={currentPage === totalPages}
+                  title="Siguiente página"
+                >
+                  Siguiente →
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
