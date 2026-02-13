@@ -36,7 +36,7 @@ app.post('/registros', async (req, res) => {
         console.log(nuevo)
         res.status(201).json(nuevo);
     } catch (error) {
-        res.status(400).json({ error: "Datos no válidos o intento de inyección bloqueado" });
+        res.status(400).json({ error });
     }
 });
 
