@@ -13,6 +13,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [editando, setEditando] = useState(null);
   const [editError, setEditError] = useState('');
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   useEffect(() => {
     obtenerRegistros();
@@ -99,6 +100,19 @@ function App() {
       const error = err as AxiosError;
       console.error("❌ Error al actualizar:", error.response?.data || error.message);
     }
+  };
+
+  useEffect(() => {
+    const onScroll = () => {
+      setShowScrollButton(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -192,6 +206,16 @@ function App() {
             </div>
           </div>
         </div>
+      )}
+      {showScrollButton && (
+        <button
+          className="scroll-to-top"
+          onClick={scrollToTop}
+          aria-label="Volver arriba"
+          title="Volver arriba"
+        >
+          ↑
+        </button>
       )}
     </div>
   );
