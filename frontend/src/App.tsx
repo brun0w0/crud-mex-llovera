@@ -30,6 +30,16 @@ function App() {
     }
   };
 
+  const formatDateTime = (iso?: string) => {
+    if (!iso) return '';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' });
+    } catch {
+      return iso;
+    }
+  };
+
   const agregarRegistro = async () => {
     const texto = nuevoTexto.trim();
     if (!texto) {
@@ -136,6 +146,7 @@ function App() {
                 <div key={reg.id} className="registro-item">
                   <div className="registro-content">
                     <p className="registro-text">{reg.contenido}</p>
+                    <div className="registro-meta">Creado el {formatDateTime(reg.createdAt)}</div>
                   </div>
                   <div className="registro-actions">
                     <button
