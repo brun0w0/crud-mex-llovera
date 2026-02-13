@@ -181,6 +181,31 @@
   background: #e0e0e0;
 }
 
+.registros-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.registros-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.registros-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.registros-count {
+  font-size: 14px;
+  color: #bbb;
+  font-weight: 500;
+}
+
 .registros-list {
   display: flex;
   flex-direction: column;

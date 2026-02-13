@@ -16,15 +16,14 @@ app.use(express.json());
 
 // 2. ESCUDO ANTI-SPAM (Rate Limit)
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 10, // Máximo 10 registros por IP
+    windowMs: 15 * 60 * 1000, 
+    max: 10, 
     message: {
         error: "Has enviado demasiadas propuestas. Por favor, espera 15 minutos antes de registrar más."
     }
 });
 
 // 3. ESQUEMA DE VALIDACIÓN (Zod)
-// Asegura que el texto no esté vacío y no pase de 100 caracteres.
 const RegistroSchema = z.object({
     contenido: z.string().min(1, "El campo no puede estar vacío").max(100, "Texto demasiado largo")
 });

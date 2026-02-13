@@ -152,35 +152,42 @@ function App() {
             </div>
           </div>
         ) : (
-          <div className="registros-list">
-            {registros.length === 0 ? (
-              <p className="empty-state">No has escrito nada</p>
-            ) : (
-              registros.map((reg: any) => (
-                <div key={reg.id} className="registro-item">
-                  <div className="registro-content">
-                    <p className="registro-text">{reg.contenido}</p>
-                    <div className="registro-meta">Creado el {formatDateTime(reg.createdAt)}</div>
-                  </div>
-                  <div className="registro-actions">
-                    <button
-                      className="btn-icon btn-edit"
-                      onClick={() => setEditando(reg)}
-                      title="Editar"
-                    >
-                      ✎
-                    </button>
-                    <button
-                      className="btn-icon btn-delete"
-                      onClick={() => eliminarRegistro(reg.id)}
-                      title="Eliminar"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
-              ))
+          <div className="registros-container">
+            {registros.length > 0 && (
+              <div className="registros-header">
+                  <span className="registros-count">Se contó <span>{registros.length.toLocaleString()}</span> registros.</span>
+              </div>
             )}
+            <div className="registros-list">
+              {registros.length === 0 ? (
+                <p className="empty-state">No has escrito nada</p>
+              ) : (
+                registros.map((reg: any) => (
+                  <div key={reg.id} className="registro-item">
+                    <div className="registro-content">
+                      <p className="registro-text">{reg.contenido}</p>
+                      <div className="registro-meta">Creado el {formatDateTime(reg.createdAt)}</div>
+                    </div>
+                    <div className="registro-actions">
+                      <button
+                        className="btn-icon btn-edit"
+                        onClick={() => setEditando(reg)}
+                        title="Editar"
+                      >
+                        ✎
+                      </button>
+                      <button
+                        className="btn-icon btn-delete"
+                        onClick={() => eliminarRegistro(reg.id)}
+                        title="Eliminar"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         )}
       </div>
