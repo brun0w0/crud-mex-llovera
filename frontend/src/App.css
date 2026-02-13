@@ -4,10 +4,11 @@
   align-items: center;
   min-height: 100vh;
   padding: 20px;
+  background: #000;
 }
 
 .card {
-  background: white;
+  background: black;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   padding: 48px;
@@ -16,15 +17,21 @@
 }
 
 .title {
-  font-size: 32px;
+  font-size: 50px;
   margin: 0 0 8px 0;
-  color: #1a1a1a;
-  font-weight: 600;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 100 !important;
   text-align: center;
+  background-image: linear-gradient(90deg, #2997ff 0%, #a65efe 35%, #f23d7f 65%, #f56024 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: bold;
 }
 
 .app-desc {
-  color: #666;
+  color: #ffffff;
   margin: 0 0 28px 0;
   text-align: center;
 }
@@ -42,7 +49,7 @@
   align-items: center;
 }
 
-.input-group > .btn {
+.input-group>.btn {
   align-self: flex-start;
   margin-top: 0px;
 }
@@ -50,47 +57,50 @@
 .input {
   flex: 1;
   padding: 12px 16px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #e0e0e048;
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
   transition: all 0.2s ease;
-  background: #fafafa;
+  background: #000000;
+  color: #fff;
 }
 
 .input:focus {
   outline: none;
-  border-color: #333;
-  background: white;
+  border-color: #ffffff;
+  background: black;
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
 .input-error {
-  color: #b00020;
-  background: rgba(176, 0, 32, 0.06);
+  color: #ff0000;
+  background: rgba(255, 0, 47, 0.334);
   padding: 10px 14px;
   border-radius: 8px;
   margin: 0 0 12px 0;
-  font-size: 14px;
+  font-size: 17px;
+  font-weight: 400;
 }
 
 .success-message {
-  color: #1b5e20;
-  background: rgba(27, 94, 32, 0.06);
+  color: #00ff11c1;
+  background: rgba(0, 255, 17, 0.24);
   padding: 10px 14px;
   border-radius: 8px;
   margin: 0 0 12px 0;
-  font-size: 14px;
+  font-size: 17px;
+  font-weight: 400;
 }
 
 .delete-message {
-  color: #9b0000;
-  background: rgba(155, 0, 0, 0.12);
+  color: #ff0000;
+  background: rgba(255, 0, 47, 0.334);
   padding: 10px 14px;
   border-radius: 8px;
   margin: 0 0 12px 0;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 400;
 }
 
 .input-column {
@@ -128,19 +138,21 @@
 .spinner {
   width: 48px;
   height: 48px;
-  border: 5px solid rgba(0,0,0,0.08);
-  border-top-color: #333;
+  border: 5px solid #8268f52a;
+  border-top-color: #8168F5;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
 .loading-text {
-  color: #666;
+  color: #fff;
   font-size: 14px;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .input::placeholder {
@@ -163,13 +175,21 @@
 }
 
 .btn-primary {
-  background: #333;
-  color: white;
+  background-image: linear-gradient(90deg, #2997ff 0%, #a65efe 35%, #f23d7f 65%, #f56024 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(166, 94, 254, 0.3);
 }
 
 .btn-primary:hover {
-  background: #1a1a1a;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(242, 61, 127, 0.5);
 }
 
 .btn-secondary {
@@ -202,19 +222,19 @@
 
 .registros-count {
   font-size: 14px;
-  color: #bbb;
+  color: #ffffffb7;
   font-weight: 500;
 }
 
 .sabias-que {
   font-size: 20px;
-  color: #7e7e7e;
+  color: #ffffffb1;
   font-weight: 500;
 }
 
 .hubieron {
   font-size: 18px;
-  color: #7e7e7e;
+  color: #ffffffa4;
   font-weight: 500;
 }
 
@@ -236,12 +256,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background: #fafafa;
+  background: #1D1D1F;
   border-radius: 8px;
-}
-
-.registro-item:hover {
-  background: #f5f5f5;
 }
 
 .registro-content {
@@ -251,16 +267,16 @@
 
 .registro-text {
   margin: 0 0 6px 0;
-  font-size: 14px;
-  color: #333;
+  font-size: 16px;
+  color: #ffffff;
   word-break: break-word;
 }
 
 .registro-fecha,
 .registro-meta {
-  font-size: 12px;
-  color: #888;
+  font-size: 14px;
   margin-top: 4px;
+  color: #ffffff58;
 }
 
 .registro-actions {
@@ -285,23 +301,23 @@
 }
 
 .btn-edit {
-  background: #f0f0f0;
-  color: #333;
+  background: #8168F5;
+  color: #fff;
 }
 
 .btn-edit:hover {
-  background: #333;
+  background: #8268f5d3;
   color: white;
 }
 
 .btn-delete {
-  background: #ffe0e0;
-  color: #d32f2f;
+  background: #ff3737;
+  color: #fff;
 }
 
 .btn-delete:hover {
-  background: #d32f2f;
-  color: white;
+  background: #ff3737bd;
+  color: #fff;
 }
 
 .modal-overlay {
@@ -318,18 +334,18 @@
 }
 
 .modal {
-  background: white;
+  background: rgb(0, 0, 0);
   border-radius: 12px;
   padding: 40px;
   width: 100%;
   max-width: 390px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 40px rgba(255, 255, 255, 0.155);
 }
 
 .modal-title {
   font-size: 24px;
   margin: 0 0 20px 0;
-  color: #1a1a1a;
+  color: #fff;
   font-weight: 600;
 }
 
@@ -345,13 +361,14 @@
   max-height: 120px;
   margin-bottom: 20px;
   transition: all 0.2s ease;
-  background: #fafafa;
+  background: #000000;
+  color: #fff;
 }
 
 .textarea:focus {
   outline: none;
-  border-color: #333;
-  background: white;
+  border-color: #fff;
+  background: rgb(0, 0, 0);
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -383,7 +400,7 @@
     height: 44px;
   }
 
-  .input-group > .btn {
+  .input-group>.btn {
     align-self: stretch;
     margin-top: 0;
   }
@@ -407,11 +424,12 @@
   justify-content: center;
   font-size: 20px;
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   border: none;
   z-index: 1001;
   transition: transform 0.18s ease, opacity 0.18s ease;
 }
+
 .scroll-to-top:hover {
   transform: translateY(-3px);
 }

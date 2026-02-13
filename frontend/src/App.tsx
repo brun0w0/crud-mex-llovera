@@ -47,7 +47,7 @@ function App() {
   const agregarRegistro = async () => {
     const texto = nuevoTexto.trim();
     if (!texto) {
-      setNuevoError('Escribe algo, no manches. LEE! LEE!!');
+      setNuevoError('Tienes que escribir algo.');
       return;
     }
     if (nuevoTexto.length > 100) {
@@ -95,7 +95,7 @@ function App() {
     try {
       await axios.put(`${API_URL}/registros/${editando.id}`, { contenido: editando.contenido });
       setEditando(null);
-      setSuccessMessage('Registro guardado');
+      setSuccessMessage('Registro guardado.');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setTimeout(() => setSuccessMessage(''), 3000);
       obtenerRegistros();
@@ -164,7 +164,7 @@ function App() {
   return (
     <div className="app-container">
       <div className="card">
-        <h1 className="title">CRUD ML</h1>
+        <h1 className="title">CRUD MEXLLOVERA</h1>
         <p className="app-desc">Crea un registro, editalo o eliminalo como quieras no me importa. Se tiene como máximo 100 carácteres.</p>
 
         {deleteMessage && <div className="delete-message">{deleteMessage}</div>}
