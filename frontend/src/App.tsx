@@ -16,7 +16,7 @@ function App() {
 
   useEffect(() => {
     obtenerRegistros();
-    const t = setTimeout(() => setLoading(false), 3000);
+    const t = setTimeout(() => setLoading(false), 500);
     return () => clearTimeout(t);
   }, []);
 
