@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_URL = 'http://localhost:3001/registros';
+const API_URL = 'https://crud-mex-llovera-production.up.railway.app';
 
 function App() {
   const [registros, setRegistros] = useState([]);
