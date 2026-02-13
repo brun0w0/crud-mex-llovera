@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import './App.css';
 
 const API_URL = 'https://crud-mex-llovera-production.up.railway.app';
@@ -13,30 +13,47 @@ function App() {
 
   const obtenerRegistros = async () => {
     try {
-      const res = await axios.get(API_URL);
+      const res = await axios.get(`${API_URL}/registros`);
       setRegistros(res.data);
-    } catch (err) { console.error("Error al obtener datos", err); }
+    } catch (err) { 
+      const error = err as AxiosError;
+      console.error("❌ Error al obtener datos:", error.response?.data || error.message); 
+    }
   };
 
   const agregarRegistro = async () => {
     if (!nuevoTexto.trim()) return;
     try {
-      await axios.post(API_URL, { contenido: nuevoTexto });
+      await axios.post(`${API_URL}/registros`, { contenido: nuevoTexto });
       setNuevoTexto('');
       obtenerRegistros();
-    } catch (err) { console.error("Error:", err); }
+    } catch (err) { 
+      const error = err as AxiosError<any>;
+      console.error("❌ Error al agregar:", error.response?.data || error.message);
+      alert(`Error: ${error.response?.data?.details || 'No se pudo agregar'}`);
+    }
   };
 
-  const eliminarRegistro = async (id) => {
-    await axios.delete(`${API_URL}/${id}`);
-    obtenerRegistros();
+  const eliminarRegistro = async (id: number) => {
+    try {
+      await axios.delete(`${API_URL}/registros/${id}`);
+      obtenerRegistros();
+    } catch (err) {
+      const error = err as AxiosError;
+      console.error("❌ Error al eliminar:", error.response?.data || error.message);
+    }
   };
 
   const actualizarRegistro = async () => {
     if (!editando.contenido.trim()) return;
-    await axios.put(`${API_URL}/${editando.id}`, { contenido: editando.contenido });
-    setEditando(null);
-    obtenerRegistros();
+    try {
+      await axios.put(`${API_URL}/registros/${editando.id}`, { contenido: editando.contenido });
+      setEditando(null);
+      obtenerRegistros();
+    } catch (err) {
+      const error = err as AxiosError;
+      console.error("❌ Error al actualizar:", error.response?.data || error.message);
+    }
   };
 
   return (
@@ -49,8 +66,8 @@ function App() {
             className="input"
             type="text"
             value={nuevoTexto}
-            onChange={(e) => setNuevoTexto(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && agregarRegistro()}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNuevoTexto(e.target.value)}
+            onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && agregarRegistro()}
             placeholder="Escribe algo"
             maxLength={100}
           />
@@ -63,7 +80,7 @@ function App() {
           {registros.length === 0 ? (
             <p className="empty-state">No has escrito nada</p>
           ) : (
-            registros.map((reg) => (
+            registros.map((reg: any) => (
               <div key={reg.id} className="registro-item">
                 <div className="registro-content">
                   <p className="registro-text">{reg.contenido}</p>
@@ -92,12 +109,12 @@ function App() {
 
       {editando && (
         <div className="modal-overlay" onClick={() => setEditando(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
             <h2 className="modal-title">Edita</h2>
             <textarea
               className="textarea"
               value={editando.contenido}
-              onChange={(e) => setEditando({ ...editando, contenido: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditando({ ...editando, contenido: e.target.value })}
               maxLength={100}
             />
             <div className="modal-actions">
