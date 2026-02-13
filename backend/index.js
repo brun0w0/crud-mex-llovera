@@ -23,10 +23,17 @@ const RegistroSchema = z.object({
 // 1. Crear Registro (POST)
 app.post('/registros', async (req, res) => {
     try {
-        const validatedData = RegistroSchema.parse(req.body);
+        // const validatedData = RegistroSchema.parse(req.body);
+        // console.log(validatedData)
+        // const nuevo = await prisma.registro.create({
+        //     data: { contenido: validatedData.contenido }
+        // });
+        const { contenido } = req.body
+        console.log(contenido)
         const nuevo = await prisma.registro.create({
-            data: { contenido: validatedData.contenido }
+            data: { contenido: contenido }
         });
+        console.log(nuevo)
         res.status(201).json(nuevo);
     } catch (error) {
         res.status(400).json({ error: "Datos no válidos o intento de inyección bloqueado" });
