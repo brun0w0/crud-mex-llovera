@@ -15,8 +15,8 @@ function App() {
   const [editError, setEditError] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
-
+  const itemsPerPage = 30;
+  const APP_VERSION = "5.8.2"
   const [isBanned, setIsBanned] = useState(false);
 
   useEffect(() => {
@@ -83,6 +83,24 @@ function App() {
     }
   };
 
+  // 💥 BOTÓN DE DESTRUCCIÓN MASIVA
+  const limpiarTodo = async () => {
+    // Alerta de doble confirmación para evitar accidentes
+    const confirmar = window.confirm("🚨 ¿ESTÁS SEGURO? Esto borrará TODOS los registros de la base de datos. Esta acción no se puede deshacer.");
+
+    if (!confirmar) return;
+
+    try {
+      const res = await axios.delete(`${API_URL}/registros/limpiar/todo`);
+      alert(res.data.message);
+      obtenerRegistros(); // Recarga la tabla para que se vea vacía
+    } catch (err) {
+      const error = err as AxiosError<any>;
+      console.error("❌ Error al vaciar la tabla:", error.response?.data || error.message);
+      alert("Error al intentar borrar todo. Revisa la consola.");
+    }
+  };
+
   const actualizarRegistro = async () => {
     const texto = (editando?.contenido || '').trim();
     if (!texto) {
@@ -141,6 +159,13 @@ function App() {
     }
   };
 
+  const goToLastPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(totalPages);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   if (isBanned) {
     return (
       <div style={{
@@ -186,6 +211,22 @@ function App() {
     <div className="app-container">
       <div className="card">
         <h1 className="title">CRUD MEXLLOVERA</h1>
+
+        {/* 🚨 BOTÓN DE DESTRUCCIÓN MASIVA (Borrar al terminar pruebas) 🚨
+        <button
+          onClick={limpiarTodo}
+          style={{
+            backgroundColor: '#8b0000', color: 'white', border: 'none',
+            padding: '8px 16px', borderRadius: '5px', cursor: 'pointer',
+            fontWeight: 'bold', marginBottom: '15px', marginTop: '5px',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.3)'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'red'}
+          onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#8b0000'}
+        >
+          💥 Borrar TODOS los registros
+        </button> */}
+
         <p className="app-desc">Crea un registro, editalo o eliminalo como quieras no me importa. Se tiene como máximo 100 carácteres.</p>
         {deleteMessage && <div className="delete-message">{deleteMessage}</div>}
         {nuevoError && <div className="input-error">{nuevoError}</div>}
@@ -233,7 +274,7 @@ function App() {
             {registros.length > 0 && (
               <div className="registros-header">
                 <span className="registros-count">Se contó <span>{registros.length.toLocaleString()}</span> registros.</span>
-                
+
               </div>
             )}
             <div className="registros-list">
@@ -274,7 +315,7 @@ function App() {
                   disabled={currentPage === 1}
                   title="Página anterior"
                 >
-                  ← Anterior
+                  ← 
                 </button>
                 <span className="pagination-info">
                   Página {currentPage} de {totalPages}
@@ -285,10 +326,22 @@ function App() {
                   disabled={currentPage === totalPages}
                   title="Siguiente página"
                 >
-                  Siguiente →
+                   →
+                </button>
+                <button
+                  className="btn btn-pagination"
+                  onClick={goToLastPage}
+                  disabled={currentPage === totalPages}
+                  title="Última página"
+                >
+                  Última página
                 </button>
               </div>
+              
             )}
+              <div style={{ textAlign: 'center', marginTop: '20px', color: '#999', fontSize: '0.95rem' }}>
+                Versión {APP_VERSION} &copy; 2026. Todos los derechos reservados.
+              </div>
           </div>
         )}
       </div>
