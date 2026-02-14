@@ -456,8 +456,8 @@
   background: #2997ff;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 20px;
+  font-size: 23px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: bold;
@@ -468,9 +468,7 @@
 }
 
 .btn-pagination:hover:not(:disabled) {
-  background: #1a7fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(41, 151, 255, 0.3);
+  background: #1178ff;
 }
 
 .btn-pagination:disabled {

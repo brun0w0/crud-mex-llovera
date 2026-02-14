@@ -16,7 +16,7 @@ function App() {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 30;
-  const APP_VERSION = "5.8.2"
+  const APP_VERSION = "2.4.0"
   const [isBanned, setIsBanned] = useState(false);
 
   useEffect(() => {
@@ -166,6 +166,13 @@ function App() {
     }
   };
 
+  const goToFirstPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   if (isBanned) {
     return (
       <div style={{
@@ -311,9 +318,17 @@ function App() {
               <div className="pagination">
                 <button
                   className="btn btn-pagination"
+                  onClick={goToFirstPage}
+                  disabled={currentPage === 1}
+                  title="Primera página"
+                >
+                    «
+                </button>
+                <button
+                  className="btn btn-pagination"
                   onClick={goToPreviousPage}
                   disabled={currentPage === 1}
-                  title="Página anterior"
+                  title="Anterior página "
                 >
                   ← 
                 </button>
@@ -334,7 +349,7 @@ function App() {
                   disabled={currentPage === totalPages}
                   title="Última página"
                 >
-                  Última página
+                  »
                 </button>
               </div>
               
