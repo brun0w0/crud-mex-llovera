@@ -77,6 +77,27 @@ app.delete('/registros/:id', async (req, res) => {
     }
 });
 
+app.delete('/registros/limpiar-palabra', async (req, res) => {
+    const { palabra } = req.body;
+    if (!palabra) {
+        return res.status(400).json({ error: "Debes especificar una palabra para eliminar." });
+    }
+    try {
+        const resultado = await prisma.registro.deleteMany({
+            where: {
+                contenido: {
+                    contains: palabra
+                }
+            }
+        });
+        res.json({
+            message: `¡Limpieza exitosa! Se eliminaron ${resultado.count} registros que contenían "${palabra}".`
+        });
+    } catch (error) {
+        res.status(500).json({ error: "No se pudo realizar la limpieza." });
+    }
+});
+
 // D. Editar Registro (PUT)
 app.put('/registros/:id', async (req, res) => {
     const { id } = req.params;
@@ -93,29 +114,7 @@ app.put('/registros/:id', async (req, res) => {
     }
 });
 
-app.delete('/registros/limpiar-palabra', async (req, res) => {
-    const { palabra } = req.body;
 
-    if (!palabra) {
-        return res.status(400).json({ error: "Debes especificar una palabra para eliminar." });
-    }
-
-    try {
-        const resultado = await prisma.registro.deleteMany({
-            where: {
-                contenido: {
-                    contains: palabra 
-                }
-            }
-        });
-
-        res.json({
-            message: `¡Limpieza exitosa! Se eliminaron ${resultado.count} registros que contenían "${palabra}".`
-        });
-    } catch (error) {
-        res.status(500).json({ error: "No se pudo realizar la limpieza." });
-    }
-});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`🚀 Servidor seguro en puerto ${PORT}`));
