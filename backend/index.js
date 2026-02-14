@@ -77,6 +77,18 @@ app.delete('/registros/:id', async (req, res) => {
     }
 });
 
+// 💥 RUTA DE DESTRUCCIÓN MASIVA (Borrar todo)
+// Debe ir arriba de la ruta de eliminar por ID para que no choquen
+app.delete('/registros/limpiar/todo', async (req, res) => {
+    try {
+        // Al pasar un objeto vacío {}, Prisma borra TODOS los registros de la tabla
+        const resultado = await prisma.registro.deleteMany({});
+        res.json({ message: `¡BOOM! Se eliminaron ${resultado.count} registros. La tabla está vacía.` });
+    } catch (error) {
+        res.status(500).json({ error: "No se pudo vaciar la base de datos." });
+    }
+});
+
 // D. Editar Registro (PUT)
 app.put('/registros/:id', async (req, res) => {
     const { id } = req.params;
