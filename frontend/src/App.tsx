@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
 import './App.css';
+import { ArrowLeft, ArrowLeftToLine, ArrowRight, ArrowRightToLine, ArrowUp, Pencil, X } from 'lucide-react';
 
 const API_URL = 'https://crud-mex-llovera-production.up.railway.app';
 
@@ -15,7 +16,7 @@ function App() {
   const [editError, setEditError] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 30;
+  const itemsPerPage = 20;
   const APP_VERSION = "2.4.0"
   const [isBanned, setIsBanned] = useState(false);
 
@@ -222,16 +223,8 @@ function App() {
         {/* 🚨 BOTÓN DE DESTRUCCIÓN MASIVA (Borrar al terminar pruebas) 🚨
         <button
           onClick={limpiarTodo}
-          style={{
-            backgroundColor: '#8b0000', color: 'white', border: 'none',
-            padding: '8px 16px', borderRadius: '5px', cursor: 'pointer',
-            fontWeight: 'bold', marginBottom: '15px', marginTop: '5px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.3)'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'red'}
-          onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#8b0000'}
         >
-          💥 Borrar TODOS los registros
+          Borrar TODOS los registros
         </button> */}
 
         <p className="app-desc">Crea un registro, editalo o eliminalo como quieras no me importa. Se tiene como máximo 100 carácteres.</p>
@@ -239,33 +232,37 @@ function App() {
         {nuevoError && <div className="input-error">{nuevoError}</div>}
         {successMessage && <div className="success-message">{successMessage}</div>}
 
-        <div className="input-group">
-          <div className="input-column">
-            <input
-              className="input"
-              type="text"
-              value={nuevoTexto}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const texto = e.target.value;
-                if (texto.toLowerCase().includes('<script>')) {
-                  setIsBanned(true);
-                  return;
-                }
-                setNuevoTexto(texto);
-                if (nuevoError) setNuevoError('');
-              }}
-              onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && agregarRegistro()}
-              placeholder="Escribe algo"
-              maxLength={100}
-            />
-            <div className="char-row">
-              <div className="char-count">{nuevoTexto.length}/100</div>
+        {!loading && (
+          <div className="input-group">
+            <div className="input-column">
+              <input
+                className="input"
+                type="text"
+                value={nuevoTexto}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const texto = e.target.value;
+                  if (texto.toLowerCase().includes('<script>')) {
+                    setIsBanned(true);
+                    return;
+                  }
+                  setNuevoTexto(texto);
+                  if (nuevoError) setNuevoError('');
+                }}
+                onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && agregarRegistro()}
+                placeholder="Escribe algo"
+                maxLength={100}
+                disabled={loading}
+                aria-busy={loading}
+              />
+              <div className="char-row">
+                <div className="char-count">{nuevoTexto.length}/100</div>
+              </div>
             </div>
+            <button className="btn btn-primary" onClick={agregarRegistro} disabled={loading} title={loading ? 'Cargando...' : 'Guardar'}>
+              Guardar
+            </button>
           </div>
-          <button className="btn btn-primary" onClick={agregarRegistro}>
-            Guardar
-          </button>
-        </div>
+        )}
 
         {loading ? (
           <div className="registros-loader">
@@ -300,14 +297,14 @@ function App() {
                         onClick={() => setEditando(reg)}
                         title="Editar"
                       >
-                        ✎
+                        <Pencil size={18} />
                       </button>
                       <button
                         className="btn-icon btn-delete"
                         onClick={() => eliminarRegistro(reg.id)}
                         title="Eliminar"
                       >
-                        ✕
+                        <X size={18} />
                       </button>
                     </div>
                   </div>
@@ -322,7 +319,7 @@ function App() {
                   disabled={currentPage === 1}
                   title="Primera página"
                 >
-                    «
+                    <ArrowLeftToLine/>
                 </button>
                 <button
                   className="btn btn-pagination"
@@ -330,7 +327,7 @@ function App() {
                   disabled={currentPage === 1}
                   title="Anterior página "
                 >
-                  ← 
+                    <ArrowLeft /> 
                 </button>
                 <span className="pagination-info">
                   Página {currentPage} de {totalPages}
@@ -341,7 +338,7 @@ function App() {
                   disabled={currentPage === totalPages}
                   title="Siguiente página"
                 >
-                   →
+                   <ArrowRight/>
                 </button>
                 <button
                   className="btn btn-pagination"
@@ -349,7 +346,7 @@ function App() {
                   disabled={currentPage === totalPages}
                   title="Última página"
                 >
-                  »
+                    <ArrowRightToLine />
                 </button>
               </div>
               
@@ -398,7 +395,7 @@ function App() {
           aria-label="Volver arriba"
           title="Volver arriba"
         >
-          ↑
+          <ArrowUp/>
         </button>
       )}
     </div>
