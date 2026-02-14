@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
+import { Filter } from 'bad-words';
 import './App.css';
 import { ArrowLeft, ArrowLeftToLine, ArrowRight, ArrowRightToLine, ArrowUp, Pencil, X } from 'lucide-react';
 
 const API_URL = 'https://crud-mex-llovera-production.up.railway.app';
+
+const filtroGroserias = new Filter();
+filtroGroserias.addWords(
+  'mierda', 'puto', 'puta', 'pendejo', 'pendeja',
+  'cabron', 'cabrona', 'chingada', 'chingar', 'idiota', 'estupido', 'gay', 'maricon'
+);
 
 function App() {
   const [registros, setRegistros] = useState([]);
@@ -58,8 +65,11 @@ function App() {
       return;
     }
     setNuevoError('');
+
     try {
-      await axios.post(`${API_URL}/registros`, { contenido: nuevoTexto });
+      const textoLimpio = filtroGroserias.clean(nuevoTexto);
+      await axios.post(`${API_URL}/registros`, { contenido: textoLimpio });
+
       setNuevoTexto('');
       setSuccessMessage('Registro guardado');
       setTimeout(() => setSuccessMessage(''), 3000);
@@ -113,10 +123,16 @@ function App() {
       return;
     }
     setEditError('');
+
     try {
-      await axios.put(`${API_URL}/registros/${editando.id}`, { contenido: editando.contenido });
+      // 👈 1. PASAMOS EL TEXTO EDITADO POR EL FILTRO
+      const textoLimpio = filtroGroserias.clean(editando.contenido);
+
+      // 👈 2. ENVIAMOS EL TEXTO LIMPIO (CENSURADO) A LA BD
+      await axios.put(`${API_URL}/registros/${editando.id}`, { contenido: textoLimpio });
+
       setEditando(null);
-      setSuccessMessage('Registro guardado.');
+      setSuccessMessage('Registro actualizado y limpio.');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setTimeout(() => setSuccessMessage(''), 3000);
       obtenerRegistros();
