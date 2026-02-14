@@ -107,22 +107,6 @@ function App() {
     }
   };
 
-  // 🧹 BOTÓN TEMPORAL PARA LIMPIAR BASURA
-  const limpiarPorPalabra = async () => {
-    const palabra = window.prompt("¿Qué palabra exacta quieres eliminar de todos los registros?");
-    if (!palabra) return;
-    try {
-      const res = await axios.delete(`${API_URL}/registros/limpiar-palabra`, {
-        data: { palabra: palabra } 
-      });
-      alert(res.data.message);
-      obtenerRegistros();
-    } catch (err) {
-      console.error("❌ Error al limpiar:", err);
-      alert("Error al limpiar los registros. Revisa la consola.");
-    }
-  };
-
   useEffect(() => {
     const onScroll = () => {
       setShowScrollButton(window.scrollY > 300);
@@ -138,7 +122,6 @@ function App() {
 
   const totalHistorico = registros.length > 0 ? Math.max(...registros.map((reg: any) => reg.id)) : 0;
 
-  // Lógica de paginación
   const totalPages = Math.ceil(registros.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -204,20 +187,6 @@ function App() {
       <div className="card">
         <h1 className="title">CRUD MEXLLOVERA</h1>
         <p className="app-desc">Crea un registro, editalo o eliminalo como quieras no me importa. Se tiene como máximo 100 carácteres.</p>
-
-
-        {/* 🚨 BOTÓN TEMPORAL DE ADMINISTRADOR - BORRAR DESPUÉS 🚨 */}
-        <button
-          onClick={limpiarPorPalabra}
-          style={{
-            backgroundColor: 'red', color: 'white', border: 'none',
-            padding: '5px 15px', borderRadius: '5px', cursor: 'pointer',
-            fontWeight: 'bold', marginBottom: '10px'
-          }}
-        >
-          🧹 Limpiar palabra específica
-        </button>
-
         {deleteMessage && <div className="delete-message">{deleteMessage}</div>}
         {nuevoError && <div className="input-error">{nuevoError}</div>}
         {successMessage && <div className="success-message">{successMessage}</div>}
